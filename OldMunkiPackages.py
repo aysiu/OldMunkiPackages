@@ -143,9 +143,6 @@ else:
 				# If it's not in the list already, add it
 				all_items[plistname]=plistdict		
 
-	print pkgs_to_delete
-	print pkgsinfo_to_delete
-
 	trash_old_stuff(pkgs_to_delete, where_to_dump)
 	trash_old_stuff(pkgsinfo_to_delete, where_to_dump)
 
