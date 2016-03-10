@@ -19,7 +19,7 @@ Open up the file and make sure you customize the **MUNKI_ROOT_PATH** field. This
 
 You may also want to change the **where_to_dump** value. By default, it will dump older packages and pkgsinfo files into the logged-in user's trash, but if you want a safer archive location, you can specify that instead.
 
-If you want to use it in conjunction with [Outset](https://github.com/chilcote/outset), you can dump it into /usr/local/outset/login-every and have the script run every time you log into your Munki server or, if you use [Offset](https://github.com/aysiu/offset), you can dump it into /usr/local/offset/logout-every and have the script run every time you log out of your Munki server. If you don't want it scheduled, you can just put it in a random folder and call it manually:
+If you want to use OMP in conjunction with [Outset](https://github.com/chilcote/outset), you can put OMP into /usr/local/outset/login-every and have the script run every time you log into your Munki server or, if you use [Offset](https://github.com/aysiu/offset), you can put OMP into /usr/local/offset/logout-every and have the script run every time you log out of your Munki server. If you don't want it scheduled, you can just put it in a random folder and call it manually:
 ```python /path/to/OldMunkiPackages.py```
 
 ## What are the requirements for OMP?
