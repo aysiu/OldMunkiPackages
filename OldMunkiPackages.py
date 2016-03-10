@@ -8,8 +8,10 @@ from xml.parsers.expat import ExpatError
 from distutils import version
 from types import StringType
 
-###### Where is the path to your Munki repo?
 MUNKI_ROOT_PATH = '/Users/Shared/munki_repo'
+###### Where is the path to your Munki repo?
+###### Uncomment the line below if your Munki repo is somewhere else
+# MUNKI_ROOT_PATH = 'Put/Path/You/Want'
 
 # Where should old packages be moved to?
 # Guess at user trash
