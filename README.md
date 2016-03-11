@@ -45,5 +45,7 @@ If you have some packages going through _development_, _testing_, _production_ w
 ## How do I keep two recent versions instead of only one?
 As I said before, the goal of this tool is to be as simple as possible. I generally test new packages as they come in. At a certain point, though, if I decide the new packages are good, I just want to flush out all the old ones at once.
 
+I don't plan on implementing a configurable number of recent package versions to keep (apart from the most recent one), but feel free to fork the project if you'd like to write your own modification.
+
 ## Acknowledgements
 I straight-up lifted some code from Munki (to compare package versions and see which is newer), so thanks to Greg Neagle and the other Munki contributors.
