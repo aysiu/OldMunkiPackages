@@ -37,6 +37,11 @@ You're welcome to look at the code, but in plain English, it basically works thi
 * Loop through the packages (both pkgsinfo and pkgs) to remove and move them to the new location.
 * Run makecatalogs if it exists (it should).
 
+## What does OMP do with older packages that aren't in the same catalogs as the newer packages?
+OMP will check the catalogs a package belongs to, sort them (so _testing, production_ and _production, testing_ will be comparable), and compare them. So only if the exact catalogs match will the old one be dumped. This works well for situations like an older package being in _testing_ and _production_, and a newer package being in only _testing_. In that case, you don't want to ditch the older package yet (until you've had a chance to test the newer one).
+
+If you have some packages going through _development_, _testing_, _production_ while other packages go through only _testing_, _production_, that's fine... as long as each package of the same name goes through the same catalog track. In other words, if CustomForYourOrg goes through _development_, _testing_, _production_ and has two versions, the older version will be ditched if both the older and newer versions have _development_, _testing_, _production_ as their catalogs. But you could also have MozillaFirefox go through only _testing_, _production_, and OMP will work fine to get rid of all the old Firefoxes, as long as they all have _testing_, _production_ as their catalogs.
+
 ## How do I keep two recent versions instead of only one?
 As I said before, the goal of this tool is to be as simple as possible. I generally test new packages as they come in. At a certain point, though, if I decide the new packages are good, I just want to flush out all the old ones at once.
 
