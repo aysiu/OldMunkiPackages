@@ -68,7 +68,7 @@ class MunkiLooseVersion(version.LooseVersion):
 
 
 # Function that moves from old location to new location for a list of items
-def trash_old_stuff(trashlist, newpath):
+def trash_old_stuff(trashlist, trashpath, newpath):
 	if isinstance(trashlist, list):
 		for old_location in trashlist:
 			# Get just the filename from the full path
@@ -147,8 +147,8 @@ else:
 				# If it's not in the list already, add it
 				all_items[plistname]=plistdict		
 
-	trash_old_stuff(pkgs_to_delete, where_to_dump)
-	trash_old_stuff(pkgsinfo_to_delete, where_to_dump)
+	trash_old_stuff(pkgs_to_delete, pkgs_path, where_to_dump)
+	trash_old_stuff(pkgsinfo_to_delete, pkgsinfo_path, where_to_dump)
 
 	# If /usr/local/munki/makecatalogs exists (it should), then run it to reflect the changes or let the user know to run it
 	if os.path.exists(makecatalogs):
