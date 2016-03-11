@@ -27,8 +27,8 @@ if os.path.exists(omp_prefs_location):
 	omp_prefs=plistlib.readPlist(omp_prefs_location)
 	where_to_dump=omp_prefs['dump_location']
 else:
-	print "Cannot determine a dump location from %s. Will be dumping to %s." % (omp_prefs_location, where_to_dump)
 	where_to_dump=default_where_to_dump
+	print "Cannot determine a dump location from %s. Will be dumping to %s." % (omp_prefs_location, where_to_dump)
 
 # Where is make catalogs?
 makecatalogs='/usr/local/munki/makecatalogs'
