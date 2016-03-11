@@ -14,7 +14,7 @@ from types import StringType
 # Try to get the new Munki path
 munkiimport_prefs_location=os.path.join(os.getenv("HOME"), "Library/Preferences/com.googlecode.munki.munkiimport.plist")
 if os.path.exists(munkiimport_prefs_location):
-	munkiimport_prefs=plistlib.readPlist(munkiimport_prefs)
+	munkiimport_prefs=plistlib.readPlist(munkiimport_prefs_location)
 	MUNKI_ROOT_PATH=munkiimport_prefs['repo_path']
 else:
 	print "Cannot find the %s preferences file to read the Munki repo path" % munkiimport_prefs_location
