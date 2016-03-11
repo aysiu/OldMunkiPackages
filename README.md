@@ -22,6 +22,8 @@ OMP will also look for your repo path in **~/Library/Preferences/com.googlecode.
 If you want to use OMP in conjunction with [Outset](https://github.com/chilcote/outset), you can put OMP into /usr/local/outset/login-every and have the script run every time you log into your Munki server or, if you use [Offset](https://github.com/aysiu/offset), you can put OMP into /usr/local/offset/logout-every and have the script run every time you log out of your Munki server. If you don't want it scheduled, you can just call it manually:
 ```python /usr/local/omp/OldMunkiPackages.py```
 
+Logs (errors or information) will go to **~/Library/Logs/omp.log**
+
 ## What are the requirements for OMP?
 I've tested it only on Mac OS X (El Capitan). In theory, it should work on older Macs. The way the script is written (referencing .plist files in ~/Library/Preferences) means it won't work for Windows or Linux.
 
@@ -48,4 +50,4 @@ As I said before, the goal of this tool is to be as simple as possible. I genera
 I don't plan on implementing a configurable number of recent package versions to keep (apart from the most recent one), but feel free to fork the project if you'd like to write your own modification.
 
 ## Acknowledgements
-I straight-up lifted some code from Munki (to compare package versions and see which is newer), so thanks to Greg Neagle and the other Munki contributors.
+I straight-up lifted some code from Munki (to compare package versions and see which is newer), so thanks to Greg Neagle and the other Munki contributors. Also thanks to Joseph Chilcote for some Python logging code.

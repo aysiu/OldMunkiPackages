@@ -1,12 +1,23 @@
 #!/usr/bin/python
 
+from distutils import version
+import logging
 import os
 import plistlib
-import sys
 from pprint import pprint
-from xml.parsers.expat import ExpatError
-from distutils import version
+import sys
 from types import StringType
+from xml.parsers.expat import ExpatError
+
+# Stolen from offset's offset
+if not os.path.exists(os.path.expanduser('~/Library/Logs')):
+	os.makedirs(os.path.expanduser('~/Library/Logs'))
+log_file = os.path.expanduser('~/Library/Logs/omp.log')
+
+logging.basicConfig(format='%(asctime)s - %(levelname)s: %(message)s',
+                    datefmt='%m/%d/%Y %I:%M:%S %p',
+                    level=logging.DEBUG,
+                    filename=log_file)
 
 # Stolen from Munki's munkicommon.py
 class MunkiLooseVersion(version.LooseVersion):
@@ -58,16 +69,16 @@ def trash_old_stuff(trashlist, trashpath, newpath):
 			# Even though we've been double-checking paths all along, let's just make one last check
 			if os.path.exists(old_location) and os.path.isdir(newpath):
 				os.rename(old_location, new_location)
-				print "Moving %s to %s\n" % (old_location, new_location)
+				logging.info("Moving %s to %s\n" % (old_location, new_location))
 			else:
-				print "One of %s or %s does not exist\n" % (old_location, new_location)
+				logging.error("One of %s or %s does not exist\n" % (old_location, new_location))
 	else:
-		print "%s is not a valid list\n" % trashlist
+		logging.error("%s is not a valid list\n" % trashlist)
 
 # Function that checks paths are writable
 def check_folder_writable(checkfolder):
 	if not os.access(checkfolder, os.W_OK):
-		print "You don't have access to %s" % checkfolder
+		logging.error("You don't have access to %s" % checkfolder)
 		sys.exit(1)
 
 # Try to get the new Munki path
@@ -76,7 +87,7 @@ if os.path.exists(munkiimport_prefs_location):
 	munkiimport_prefs=plistlib.readPlist(munkiimport_prefs_location)
 	MUNKI_ROOT_PATH=munkiimport_prefs['repo_path']
 else:
-	print "Cannot find the %s preferences file to read the Munki repo path" % munkiimport_prefs_location
+	logging.error("Cannot find the %s preferences file to read the Munki repo path" % munkiimport_prefs_location)
 	sys.exit(1)
 
 # Where should old packages be moved to? User Trash by default
@@ -87,12 +98,12 @@ if os.path.exists(omp_prefs_location):
 	where_to_dump=omp_prefs['dump_location']
 else:
 	where_to_dump=default_where_to_dump
-	print "Cannot determine a dump location from %s. Will be dumping to %s." % (omp_prefs_location, where_to_dump)
+	logging.info("Cannot determine a dump location from %s. Will be dumping to %s." % (omp_prefs_location, where_to_dump))
 
 # Where is make catalogs?
 makecatalogs='/usr/local/munki/makecatalogs'
 
-# Double-check the user trash exists
+# Double-check the user dump folder exists
 if not os.path.isdir(where_to_dump):
 	# If the directory doesn't already exist, make it
 	where_to_dump=os.makedirs(where_to_dump)
@@ -106,7 +117,7 @@ pkgs_path=os.path.join(MUNKI_ROOT_PATH, MUNKI_PKGS_DIR_NAME)
 
 # Check that the paths for the pkgsinfo and pkgs exist
 if not os.path.isdir(pkgsinfo_path) and not os.path.isdir(pkgs_path):
-	print "Your pkgsinfo and pkgs paths ae not valid. Please check your MUNKI_ROOT_PATH value"
+	logging.error("Your pkgsinfo and pkgs paths ae not valid. Please check your MUNKI_ROOT_PATH value")
 else:
 	# Make sure all relevant folders are writable
 	check_folder_writable(pkgsinfo_path)
@@ -174,9 +185,9 @@ else:
 	if pkgs_to_delete or pkgsinfo_to_delete:
 		# If /usr/local/munki/makecatalogs exists (it should), then run it to reflect the changes or let the user know to run it
 		if os.path.exists(makecatalogs):
-			print "Running makecatalogs"
+			logging.info("Running makecatalogs")
 			os.system(makecatalogs)
 		else:
-			print "%s could not be found. When you have a chance, run makecatalogs on your Munki repo to have the changes reflected." % makecatalogs
+			logging.error("%s could not be found. When you have a chance, run makecatalogs on your Munki repo to have the changes reflected." % makecatalogs)
 	else:
-		print "Nothing old to dump."
+		logging.info("Nothing old to dump.")
