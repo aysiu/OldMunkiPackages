@@ -12,7 +12,7 @@ from xml.parsers.expat import ExpatError
 # Stolen from offset's offset
 if not os.path.exists(os.path.expanduser('~/Library/Logs')):
 	os.makedirs(os.path.expanduser('~/Library/Logs'))
-	log_file = os.path.expanduser('~/Library/Logs/omp.log')
+log_file = os.path.expanduser('~/Library/Logs/omp.log')
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s: %(message)s',
                     datefmt='%m/%d/%Y %I:%M:%S %p',
