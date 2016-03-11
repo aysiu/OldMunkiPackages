@@ -12,14 +12,22 @@ There are other great tools and tutorials (see below) that do similar things but
 
 I wanted to keep OMP (Old Munki Packages) fairly simple--just run with no arguments and automatically dump the old packages and pkginfo files.
 
-## How do you use OMP?
-Download the **OldMunkiPackages.py** file and put it in /usr/local/omp/OldMunkiPackages.py.
+## How do you install OMP?
+
+### Install .pkg file
+Head over to [the releases page](https://github.com/aysiu/OldMunkiPackages/releases/) to get the latest pre-packaged release.
+
+### "Install" OMP manually
+Download the **OldMunkiPackages.py** file and put it in **/usr/local/omp/**
 
 If you would like the dumped files to go somewhere other than your trash, modify the &lt;string&gt;&lt;/string&gt; part to be &lt;string&gt;/Path/To/Where/You/Want/Files/Dumped&lt;/string&gt;, and then put the **com.github.aysiu.omp.plist** file in the /Users/*username*/Library/Preferences folder of the *username* you're going to run OMP under. Otherwise, OMP will just default to using the logged-in user's trash as the dump folder.
 
+## How do you use OMP?
 OMP will also look for your repo path in **~/Library/Preferences/com.googlecode.munki.munkiimport.plist**, which you create when you run the `/usr/local/munki/munkiimport --configure` command the first time you set up Munki.
 
-If you want to use OMP in conjunction with [Outset](https://github.com/chilcote/outset), you can put OMP into /usr/local/outset/login-every and have the script run every time you log into your Munki server or, if you use [Offset](https://github.com/aysiu/offset), you can put OMP into /usr/local/offset/logout-every and have the script run every time you log out of your Munki server. If you don't want it scheduled, you can just call it manually:
+If you want to use OMP in conjunction with [Outset](https://github.com/chilcote/outset), you can put OMP into /usr/local/outset/login-every and have the script run every time you log into your Munki server or, if you use [Offset](https://github.com/aysiu/offset), you can put OMP into /usr/local/offset/logout-every and have the script run every time you log out of your Munki server.
+
+If you don't want it scheduled, you can just call it manually:
 ```python /usr/local/omp/OldMunkiPackages.py```
 
 Logs (errors or information) will go to **~/Library/Logs/omp.log**
