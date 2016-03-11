@@ -1,12 +1,13 @@
 #!/usr/bin/python
 
+from distutils import version
+import logging
 import os
 import plistlib
-import sys
 from pprint import pprint
-from xml.parsers.expat import ExpatError
-from distutils import version
+import sys
 from types import StringType
+from xml.parsers.expat import ExpatError
 
 # Stolen from Munki's munkicommon.py
 class MunkiLooseVersion(version.LooseVersion):
