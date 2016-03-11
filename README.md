@@ -15,7 +15,7 @@ I wanted to keep OMP (Old Munki Packages) fairly simple--just run with no argume
 ## How do you use OMP?
 Download the **OldMunkiPackages.py** file and put it somewhere you can reference later. It can go in /usr/local/bin/OldMunkiPackages.py or even on your desktop.
 
-If you would like the dumped files to go somewhere other than your trash, modify the <string></string> part to be <string>/Path/To/Where/You/Want/Files/Dumped</string>, and then put the **com.github.aysiu.omp.plist** file in the /Users/*username*/Library/Preferences folder of the *username* you're going to run OMP under. Otherwise, OMP will just default to using the logged-in user's trash as the dump folder.
+If you would like the dumped files to go somewhere other than your trash, modify the &lt;string&gt;&lt;/string&gt; part to be &lt;string&gt;/Path/To/Where/You/Want/Files/Dumped&lt;/string&gt;, and then put the **com.github.aysiu.omp.plist** file in the /Users/*username*/Library/Preferences folder of the *username* you're going to run OMP under. Otherwise, OMP will just default to using the logged-in user's trash as the dump folder.
 
 OMP will also look for your repo path in **~/Library/Preferences/com.googlecode.munki.munkiimport.plist**, which you create when you run the `/usr/local/munki/munkiimport --configure` command the first time you set up Munki.
 
