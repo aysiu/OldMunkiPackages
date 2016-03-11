@@ -10,20 +10,20 @@ There are other great tools and tutorials (see below) that do similar things but
 
 [Spruce](https://github.com/sheagcraig/Spruce-for-Munki) is a fairly sophisticated tool that does way more than I want (pretty cool features, though), and then there's [an interactive shell script](https://grpugh.wordpress.com/2015/04/24/munki-how-to-remove-cruft/) that helps to get old things out.
 
-I wanted to keep OMP (Old Munki Packages) fairly simple.
+I wanted to keep OMP (Old Munki Packages) fairly simple--just run with no arguments and automatically dump the old packages and pkginfo files.
 
 ## How do you use OMP?
-Download the OldMunkiPackages.py file and put it somewhere you can reference later. It can go in /usr/local/bin/OldMunkiPackages.py or even on your desktop.
+Download the **OldMunkiPackages.py** file and put it somewhere you can reference later. It can go in /usr/local/bin/OldMunkiPackages.py or even on your desktop.
 
-Open up the file and make sure you customize the **MUNKI_ROOT_PATH** field. This is where your Munki repo lives on the server--if you've followed beginner tutorials for Munki, the location will likely be */Users/Shared/munki_repo*, which is the default value. Feel free to leave that unchanged if it matches your setup.
+If you would like the dumped files to go somewhere other than your trash, modify the <string></string> part to be <string>/Path/To/Where/You/Want/Files/Dumped</string>, and then put the **com.github.aysiu.omp.plist** file in the /Users/*username*/Library/Preferences folder of the *username* you're going to run OMP under. Otherwise, OMP will just default to using the logged-in user's trash as the dump folder.
 
-You may also want to change the **where_to_dump** value. By default, it will dump older packages and pkgsinfo files into the logged-in user's trash, but if you want a safer archive location, you can specify that instead.
+OMP will also look for your repo path in **~/Library/Preferences/com.googlecode.munki.munkiimport.plist**, which you create when you run the `/usr/local/munki/munkiimport --configure` command the first time you set up Munki.
 
 If you want to use OMP in conjunction with [Outset](https://github.com/chilcote/outset), you can put OMP into /usr/local/outset/login-every and have the script run every time you log into your Munki server or, if you use [Offset](https://github.com/aysiu/offset), you can put OMP into /usr/local/offset/logout-every and have the script run every time you log out of your Munki server. If you don't want it scheduled, you can just put it in a random folder and call it manually:
 ```python /path/to/OldMunkiPackages.py```
 
 ## What are the requirements for OMP?
-I've tested it only on Mac OS X (El Capitan). In theory, it should work on older Macs and on Linux servers, too, as long as you have Python installed. It may even work on a WAMP server--haven't tested it on Windows or Linux.
+I've tested it only on Mac OS X (El Capitan). In theory, it should work on older Macs. The way the script is written (referencing .plist files in ~/Library/Preferences) means it won't work for Windows or Linux.
 
 The user who runs the script must have full read/write permissions on the Munki repository, as well as the destination (her own trash, or whatever folder you pick to move the old packages to).
 
@@ -35,7 +35,7 @@ You're welcome to look at the code, but in plain English, it basically works thi
 * Loop through the pkgsinfo folder (and subfolders) in the Munki repo.
 * For each pkgsinfo, check to see if it exists in a list of packages to keep. If it doesn't, add it. If it does, and it's a newer version than what's already in there, move the older one to a list of packages to remove, and then put the newer version in the list of packages to keep.
 * Loop through the packages (both pkgsinfo and pkgs) to remove and move them to the new location.
-* Run makecatalogs if it exists (it should).
+* If any files have been dumped, run makecatalogs if it exists (it should).
 
 ## What does OMP do with older packages that aren't in the same catalogs as the newer packages?
 OMP will check the catalogs a package belongs to, sort them (so _testing, production_ and _production, testing_ will be comparable), and compare them. So only if the exact catalogs match will the old one be dumped. This works well for situations like an older package being in _testing_ and _production_, and a newer package being in only _testing_. In that case, you don't want to ditch the older package yet (until you've had a chance to test the newer one).
