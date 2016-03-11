@@ -150,12 +150,17 @@ else:
 				# If it's not in the list already, add it
 				all_items[plistname]=plistdict		
 
-	trash_old_stuff(pkgs_to_delete, pkgs_path, where_to_dump)
-	trash_old_stuff(pkgsinfo_to_delete, pkgsinfo_path, where_to_dump)
+	if pkgs_to_delete:
+		trash_old_stuff(pkgs_to_delete, pkgs_path, where_to_dump)
+	if pkgsinfo_to_delete:
+		trash_old_stuff(pkgsinfo_to_delete, pkgsinfo_path, where_to_dump)
 
-	# If /usr/local/munki/makecatalogs exists (it should), then run it to reflect the changes or let the user know to run it
-	if os.path.exists(makecatalogs):
-		print "Running makecatalogs"
-		os.system(makecatalogs)
+	if pkgs_to_delete or pkgsinfo_to_delete:
+		# If /usr/local/munki/makecatalogs exists (it should), then run it to reflect the changes or let the user know to run it
+		if os.path.exists(makecatalogs):
+			print "Running makecatalogs"
+			os.system(makecatalogs)
+		else:
+			print "%s could not be found. When you have a chance, run makecatalogs on your Munki repo to have the changes reflected." % makecatalogs
 	else:
-		print "%s could not be found. When you have a chance, run makecatalogs on your Munki repo to have the changes reflected." % makecatalogs
+		print "Nothing old to dump."
