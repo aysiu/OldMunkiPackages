@@ -25,7 +25,7 @@ If you want to use OMP in conjunction with [Outset](https://github.com/chilcote/
 ## What are the requirements for OMP?
 I've tested it only on Mac OS X (El Capitan). In theory, it should work on older Macs. The way the script is written (referencing .plist files in ~/Library/Preferences) means it won't work for Windows or Linux.
 
-The user who runs the script must have full read/write permissions on the Munki repository, as well as the destination (her own trash, or whatever folder you pick to move the old packages to).
+The user who runs the script must have full read/write permissions on the Munki repository, as well as the destination (her own trash, or whatever folder she picks to move the old packages to).
 
 ## Why isn't OMP on a schedule?
 The script isn't that destructive (rather than straight-out deleting the packages, it just moves them to a new location, even if that new location is the trash). Nevertheless, I would rather leave it up to the user to schedule (or run manually).
