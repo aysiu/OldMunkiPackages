@@ -8,17 +8,27 @@ from xml.parsers.expat import ExpatError
 from distutils import version
 from types import StringType
 
-MUNKI_ROOT_PATH = '/Users/Shared/munki_repo'
-###### Where is the path to your Munki repo?
-###### Uncomment the line below if your Munki repo is somewhere else
-# MUNKI_ROOT_PATH = 'Put/Path/You/Want'
+# Will probably later remove this line. We're just going to check the repo to see if it's defined... and exit uncleanly otherwise
+#MUNKI_ROOT_PATH = '/Users/Shared/munki_repo'
 
-# Where should old packages be moved to?
-# Guess at user trash
-where_to_dump=os.path.join(os.getenv("HOME"), ".Trash")
+# Try to get the new Munki path
+munkiimport_prefs_location=os.path.join(os.getenv("HOME"), "Library/Preferences/com.googlecode.munki.munkiimport.plist")
+if os.path.exists(munkiimport_prefs_location):
+	munkiimport_prefs=plistlib.readPlist(munkiimport_prefs_location)
+	MUNKI_ROOT_PATH=munkiimport_prefs['repo_path']
+else:
+	print "Cannot find the %s preferences file to read the Munki repo path" % munkiimport_prefs_location
+	sys.exit(1)
 
-###### Uncomment the line below if you'd like the packages to go somewhere other than the trash folder
-# where_to_dump='/Put/Path/You/Want'
+# Where should old packages be moved to? User Trash by default
+default_where_to_dump=os.path.join(os.getenv("HOME"), ".Trash")
+omp_prefs_location=os.path.join(os.getenv("HOME"), "Library/Preferences/com.github.aysiu.omp.plist")
+if os.path.exists(omp_prefs_location):
+	omp_prefs=plistlib.readPlist(omp_prefs_location)
+	where_to_dump=omp_prefs['dump_location']
+else:
+	where_to_dump=default_where_to_dump
+	print "Cannot determine a dump location from %s. Will be dumping to %s." % (omp_prefs_location, where_to_dump)
 
 # Where is make catalogs?
 makecatalogs='/usr/local/munki/makecatalogs'
