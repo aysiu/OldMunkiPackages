@@ -71,11 +71,14 @@ class MunkiLooseVersion(version.LooseVersion):
 def trash_old_stuff(trashlist, trashpath, newpath):
 	if isinstance(trashlist, list):
 		for old_location in trashlist:
-			# Get just the filename from the full path
+			# Get the subfolders needed to be created
 			path_within_destination=os.path.relpath(old_location, trashpath)
+			# Create what will be the destination path
 			new_location=os.path.join(newpath, path_within_destination)
+			# Make sure all the relevant subfolders exist in the destination
 			if not os.path.exists(os.path.dirname(new_location)):
 				os.makedirs(os.path.dirname(new_location))
+			# Even though we've been double-checking paths all along, let's just make one last check
 			if os.path.exists(old_location) and os.path.isdir(newpath):
 				os.rename(old_location, new_location)
 				print "Moving %s to %s\n" % (old_location, new_location)
