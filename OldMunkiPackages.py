@@ -8,39 +8,6 @@ from xml.parsers.expat import ExpatError
 from distutils import version
 from types import StringType
 
-# Will probably later remove this line. We're just going to check the repo to see if it's defined... and exit uncleanly otherwise
-#MUNKI_ROOT_PATH = '/Users/Shared/munki_repo'
-
-# Try to get the new Munki path
-munkiimport_prefs_location=os.path.join(os.getenv("HOME"), "Library/Preferences/com.googlecode.munki.munkiimport.plist")
-if os.path.exists(munkiimport_prefs_location):
-	munkiimport_prefs=plistlib.readPlist(munkiimport_prefs_location)
-	MUNKI_ROOT_PATH=munkiimport_prefs['repo_path']
-else:
-	print "Cannot find the %s preferences file to read the Munki repo path" % munkiimport_prefs_location
-	sys.exit(1)
-
-# Where should old packages be moved to? User Trash by default
-default_where_to_dump=os.path.join(os.getenv("HOME"), ".Trash")
-omp_prefs_location=os.path.join(os.getenv("HOME"), "Library/Preferences/com.github.aysiu.omp.plist")
-if os.path.exists(omp_prefs_location):
-	omp_prefs=plistlib.readPlist(omp_prefs_location)
-	where_to_dump=omp_prefs['dump_location']
-else:
-	where_to_dump=default_where_to_dump
-	print "Cannot determine a dump location from %s. Will be dumping to %s." % (omp_prefs_location, where_to_dump)
-
-# Where is make catalogs?
-makecatalogs='/usr/local/munki/makecatalogs'
-
-# Double-check the user trash exists
-if not os.path.isdir(where_to_dump):
-	# If the directory doesn't already exist, make it
-	where_to_dump=os.makedirs(where_to_dump)
-
-MUNKI_PKGS_DIR_NAME = 'pkgs'
-MUNKI_PKGSINFO_DIR_NAME = 'pkgsinfo'
-
 # Stolen from Munki's munkicommon.py
 class MunkiLooseVersion(version.LooseVersion):
     '''Subclass version.LooseVersion to compare things like
@@ -97,6 +64,41 @@ def trash_old_stuff(trashlist, trashpath, newpath):
 	else:
 		print "%s is not a valid list\n" % trashlist
 
+# Function that checks paths are writable
+def check_folder_writable(checkfolder):
+	if not os.access(checkfolder, os.W_OK):
+		print "You don't have access to %s" % checkfolder
+		sys.exit(1)
+
+# Try to get the new Munki path
+munkiimport_prefs_location=os.path.join(os.getenv("HOME"), "Library/Preferences/com.googlecode.munki.munkiimport.plist")
+if os.path.exists(munkiimport_prefs_location):
+	munkiimport_prefs=plistlib.readPlist(munkiimport_prefs_location)
+	MUNKI_ROOT_PATH=munkiimport_prefs['repo_path']
+else:
+	print "Cannot find the %s preferences file to read the Munki repo path" % munkiimport_prefs_location
+	sys.exit(1)
+
+# Where should old packages be moved to? User Trash by default
+default_where_to_dump=os.path.join(os.getenv("HOME"), ".Trash")
+omp_prefs_location=os.path.join(os.getenv("HOME"), "Library/Preferences/com.github.aysiu.omp.plist")
+if os.path.exists(omp_prefs_location):
+	omp_prefs=plistlib.readPlist(omp_prefs_location)
+	where_to_dump=omp_prefs['dump_location']
+else:
+	where_to_dump=default_where_to_dump
+	print "Cannot determine a dump location from %s. Will be dumping to %s." % (omp_prefs_location, where_to_dump)
+
+# Where is make catalogs?
+makecatalogs='/usr/local/munki/makecatalogs'
+
+# Double-check the user trash exists
+if not os.path.isdir(where_to_dump):
+	# If the directory doesn't already exist, make it
+	where_to_dump=os.makedirs(where_to_dump)
+
+MUNKI_PKGS_DIR_NAME = 'pkgs'
+MUNKI_PKGSINFO_DIR_NAME = 'pkgsinfo'
 
 # Join paths based on what's defined
 pkgsinfo_path=os.path.join(MUNKI_ROOT_PATH, MUNKI_PKGSINFO_DIR_NAME)
@@ -106,7 +108,11 @@ pkgs_path=os.path.join(MUNKI_ROOT_PATH, MUNKI_PKGS_DIR_NAME)
 if not os.path.isdir(pkgsinfo_path) and not os.path.isdir(pkgs_path):
 	print "Your pkgsinfo and pkgs paths ae not valid. Please check your MUNKI_ROOT_PATH value"
 else:
-
+	# Make sure all relevant folders are writable
+	check_folder_writable(pkgsinfo_path)
+	check_folder_writable(pkgs_path)
+	check_folder_writable(where_to_dump)
+	
 	# A list to store all items
 	all_items = {};
 
