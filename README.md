@@ -10,7 +10,7 @@ Cleans out old Munki packages
 * [Why isn't OMP on a schedule?](#why-isnt-omp-on-a-schedule)
 * [How does OMP work?](#how-does-omp-work)
 * [What does OMP do with older packages that aren't in the same catalogs as the newer packages?](#what-does-omp-do-with-older-packages-that-arent-in-the-same-catalogs-as-the-newer-packages)
-* [How do I keep two recent versions instead of only one?](#how-do-I-keep-two-recent-versions-instead-of-only-one)
+* [How do I keep two recent versions instead of only one?](#how-do-i-keep-two-recent-versions-instead-of-only-one)
 * [Acknowledgements](#acknowledgements)
 
 ## Why does OldMunkiPackages exist?
