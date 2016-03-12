@@ -11,7 +11,7 @@ Cleans out old Munki packages
 * [How does OMP work?](#how-does-omp-work)
 * [What does OMP do with older packages that aren't in the same catalogs as the newer packages?](#what-does-omp-do-with-older-packages-that-arent-in-the-same-catalogs-as-the-newer-packages)
 * [How do I keep two recent versions instead of only one?](#how-do-I-keep-two-recent-versions-instead-of-only-one)
-* [Acknowledgements](acknowledgements)
+* [Acknowledgements](#acknowledgements)
 
 ## Why does OldMunkiPackages exist?
 Like a lot of open source software, this is useful to the author (me). Others may find it useful, too, which is why I'm sharing it, but ultimately I created it to cull old packages from the [Munki](https://github.com/munki/munki/wiki) server I maintain. If you find yourself doing that a lot, too, you may find this useful.
