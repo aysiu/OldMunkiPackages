@@ -1,6 +1,18 @@
 # OldMunkiPackages
 Cleans out old Munki packages
 
+* [Why does OldMunkiPackages exist?](#why-does-oldmunkipackages-exist)
+* [How do you install OMP?](#how-do-you-install-omp)
+ * [Install .pkg file](#install-pkg-file)
+ * ["Install" OMP manually](#install-omp-manually)
+* [How do you use OMP?](#how-do-you-use-omp)
+* [What are the requirements for OMP?](#what-are-the-requirements-for-omp)
+* [Why isn't OMP on a schedule?](#why-isnt-omp-on-a-schedule)
+* [How does OMP work?](#how-does-omp-work)
+* [What does OMP do with older packages that aren't in the same catalogs as the newer packages?](#what-does-omp-do-with-older-packages-that-arent-in-the-same-catalogs-as-the-newer-packages)
+* [How do I keep two recent versions instead of only one?](#how-do-I-keep-two-recent-versions-instead-of-only-one)
+* [Acknowledgements](acknowledgements)
+
 ## Why does OldMunkiPackages exist?
 Like a lot of open source software, this is useful to the author (me). Others may find it useful, too, which is why I'm sharing it, but ultimately I created it to cull old packages from the [Munki](https://github.com/munki/munki/wiki) server I maintain. If you find yourself doing that a lot, too, you may find this useful.
 
