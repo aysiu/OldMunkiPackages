@@ -103,11 +103,6 @@ else:
 # Where is make catalogs?
 makecatalogs='/usr/local/munki/makecatalogs'
 
-# Double-check the user dump folder exists
-if not os.path.isdir(where_to_dump):
-	# If the directory doesn't already exist, make it
-	where_to_dump=os.makedirs(where_to_dump)
-
 MUNKI_PKGS_DIR_NAME = 'pkgs'
 MUNKI_PKGSINFO_DIR_NAME = 'pkgsinfo'
 
@@ -117,7 +112,7 @@ pkgs_path=os.path.join(MUNKI_ROOT_PATH, MUNKI_PKGS_DIR_NAME)
 
 # Check that the paths for the pkgsinfo and pkgs exist
 if not os.path.isdir(pkgsinfo_path) and not os.path.isdir(pkgs_path):
-	logging.error("Your pkgsinfo and pkgs paths ae not valid. Please check your MUNKI_ROOT_PATH value")
+	logging.error("Your pkgsinfo and pkgs paths are not valid. Please check your MUNKI_ROOT_PATH value")
 else:
 	# Make sure all relevant folders are writable
 	check_folder_writable(pkgsinfo_path)
