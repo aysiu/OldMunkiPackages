@@ -95,7 +95,12 @@ default_where_to_dump=os.path.join(os.getenv("HOME"), ".Trash")
 omp_prefs_location=os.path.join(os.getenv("HOME"), "Library/Preferences/com.github.aysiu.omp.plist")
 if os.path.exists(omp_prefs_location):
 	omp_prefs=plistlib.readPlist(omp_prefs_location)
-	where_to_dump=omp_prefs['dump_location']
+	if os.path.exists(omp_prefs['dump_location']:
+		where_to_dump=omp_prefs['dump_location']
+		logging.info("Will use dump location from the preferences file of %s." % where_to_dump)
+	else:
+		where_to_dump=default_where_to_dump
+		logging.info("Cannot determine a dump location from %s. Will be dumping to %s." % (omp_prefs_location, where_to_dump))
 else:
 	where_to_dump=default_where_to_dump
 	logging.info("Cannot determine a dump location from %s. Will be dumping to %s." % (omp_prefs_location, where_to_dump))
@@ -117,7 +122,7 @@ pkgs_path=os.path.join(MUNKI_ROOT_PATH, MUNKI_PKGS_DIR_NAME)
 
 # Check that the paths for the pkgsinfo and pkgs exist
 if not os.path.isdir(pkgsinfo_path) and not os.path.isdir(pkgs_path):
-	logging.error("Your pkgsinfo and pkgs paths ae not valid. Please check your MUNKI_ROOT_PATH value")
+	logging.error("Your pkgsinfo and pkgs paths are not valid. Please check your MUNKI_ROOT_PATH value")
 else:
 	# Make sure all relevant folders are writable
 	check_folder_writable(pkgsinfo_path)
