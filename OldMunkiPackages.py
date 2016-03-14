@@ -95,7 +95,7 @@ default_where_to_dump=os.path.join(os.getenv("HOME"), ".Trash")
 omp_prefs_location=os.path.join(os.getenv("HOME"), "Library/Preferences/com.github.aysiu.omp.plist")
 if os.path.exists(omp_prefs_location):
 	omp_prefs=plistlib.readPlist(omp_prefs_location)
-	if os.path.exists(omp_prefs['dump_location']:
+	if os.path.exists(omp_prefs['dump_location']):
 		where_to_dump=omp_prefs['dump_location']
 		logging.info("Will use dump location from the preferences file of %s." % where_to_dump)
 	else:
