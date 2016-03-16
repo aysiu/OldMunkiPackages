@@ -11,6 +11,7 @@ Cleans out old Munki packages
 * [How does OMP work?](#how-does-omp-work)
 * [What does OMP do with older packages that aren't in the same catalogs as the newer packages?](#what-does-omp-do-with-older-packages-that-arent-in-the-same-catalogs-as-the-newer-packages)
 * [How do I keep two recent versions instead of only one?](#how-do-i-keep-two-recent-versions-instead-of-only-one)
+* [How do I make sure one particular old version of a package never gets removed?](#how-do-make-sure-one-particular-old-version-of-a-package-never-gets-removed)
 * [Acknowledgements](#acknowledgements)
 
 ## Why does OldMunkiPackages exist?
@@ -68,6 +69,9 @@ If you have some packages going through _development_, _testing_, _production_ w
 As I said before, the goal of this tool is to be as simple as possible. I generally test new packages as they come in. At a certain point, though, if I decide the new packages are good, I just want to flush out all the old ones at once.
 
 I don't plan on implementing a configurable number of recent package versions to keep (apart from the most recent one), but feel free to fork the project if you'd like to write your own modification.
+
+## How do I make sure one particular old version of a package never gets removed?
+I'm currently contemplating how to best address this, and I've opened an issue (for myself) on this. There should be a way to protect these older packages (a great example is Office2011_update version 14.1.0--more details at [its AutoPkg recipe](https://github.com/autopkg/recipes/blob/master/MSOfficeUpdates/MSOffice2011Updates.munki.recipe).
 
 ## Acknowledgements
 I straight-up lifted some code from Munki (to compare package versions and see which is newer), so thanks to Greg Neagle and the other Munki contributors. Also thanks to Joseph Chilcote for some Python logging code.
