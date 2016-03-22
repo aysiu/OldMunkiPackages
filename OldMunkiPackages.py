@@ -11,6 +11,7 @@ from xml.parsers.expat import ExpatError
 
 # Dictionary of protected packages.
 # May move this to a .plist, if it turns out to be popular and more than just Microsoft Office 2011 updates.
+protected_packages = {}
 protected_packages['Office2011_update'] = { 'version': '14.1.0' }
 
 # Stolen from offset's offset
