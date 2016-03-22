@@ -9,6 +9,10 @@ import sys
 from types import StringType
 from xml.parsers.expat import ExpatError
 
+# Dictionary of protected packages.
+# May move this to a .plist, if it turns out to be popular and more than just Microsoft Office 2011 updates.
+protected_packages['Office2011_update'] = { 'version': '14.1.0' }
+
 # Stolen from offset's offset
 if not os.path.exists(os.path.expanduser('~/Library/Logs')):
 	os.makedirs(os.path.expanduser('~/Library/Logs'))
@@ -53,7 +57,6 @@ class MunkiLooseVersion(version.LooseVersion):
         other_cmp_version = self._pad(other.version, max_length)
 
         return cmp(self_cmp_version, other_cmp_version)
-
 
 # Function that moves from old location to new location for a list of items
 def trash_old_stuff(trashlist, trashpath, newpath):
@@ -166,21 +169,23 @@ def main():
 				
 				# See if the plist name is already in all_items
 				if plistname in all_items:
-					# Compare the previously existing one to the currently focused one to see if they have the same catalogs (fix this because it could be testing production or production testing)
-					if all_items[plistname]['catalogs'] == plistcatalogs and all_items[plistname]['minimum_os_version'] == plistminimum_os_version:
-						# See if this is a newer version than the one in there
-						if cmp (MunkiLooseVersion(plistversion), MunkiLooseVersion(all_items[plistname]['version'])) > 0 :
-							# If this is newer, then move the old one to the items to delete list
-							if( all_items[plistname]['installer_item_location'] != '' ):
-								pkgs_to_delete.append(all_items[plistname]['installer_item_location'])
-							pkgsinfo_to_delete.append(all_items[plistname]['pkginfo'])
-							del all_items[plistname]
-							all_items[plistname]=plistdict
-						else:
-							# Otherwise, if this is older, keep the old one in there, and move this one to the delete list
-							if( plistdict['installer_item_location'] != '' ):
-								pkgs_to_delete.append(plistdict['installer_item_location'])
-							pkgsinfo_to_delete.append(plistdict['pkginfo'])
+					# Make sure it's not a protected package
+					if plistname not in protected_packages or protected_packages[plistname]['version'] != plistversion:
+						# Compare the previously existing one to the currently focused one to see if they have the same catalogs (fix this because it could be testing production or production testing)
+						if all_items[plistname]['catalogs'] == plistcatalogs and all_items[plistname]['minimum_os_version'] == plistminimum_os_version:
+							# See if this is a newer version than the one in there
+							if cmp (MunkiLooseVersion(plistversion), MunkiLooseVersion(all_items[plistname]['version'])) > 0 :
+								# If this is newer, then move the old one to the items to delete list
+								if( all_items[plistname]['installer_item_location'] != '' ):
+									pkgs_to_delete.append(all_items[plistname]['installer_item_location'])
+								pkgsinfo_to_delete.append(all_items[plistname]['pkginfo'])
+								del all_items[plistname]
+								all_items[plistname]=plistdict
+							else:
+								# Otherwise, if this is older, keep the old one in there, and move this one to the delete list
+								if( plistdict['installer_item_location'] != '' ):
+									pkgs_to_delete.append(plistdict['installer_item_location'])
+								pkgsinfo_to_delete.append(plistdict['pkginfo'])
 				else:
 					# If it's not in the list already, add it
 					all_items[plistname]=plistdict		
