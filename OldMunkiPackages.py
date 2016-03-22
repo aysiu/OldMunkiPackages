@@ -148,6 +148,7 @@ def main():
 				plist = plistlib.readPlist(fullfile)
 				plistname = plist['name']
 				plistversion = plist['version']
+				plistminosversion = plist['minosversion']
 				plistcatalogs = plist['catalogs']
 				plistcatalogs.sort()
 				# Some items won't have an installer_item_location: nopkg .plist files, for example... that's okay
@@ -157,12 +158,12 @@ def main():
 					plistinstaller_item_location = ''
 		
 				# Create a dictionary based on the plist values read
-				plistdict={ 'pkginfo': fullfile, 'version': plistversion, 'catalogs': plistcatalogs, 'installer_item_location': plistinstaller_item_location}
+				plistdict={ 'pkginfo': fullfile, 'version': plistversion, 'catalogs': plistcatalogs, 'installer_item_location': plistinstaller_item_location, 'minosversion': plistminosversion}
 				
 				# See if the plist name is already in all_items
 				if plistname in all_items:
 					# Compare the previously existing one to the currently focused one to see if they have the same catalogs (fix this because it could be testing production or production testing)
-					if all_items[plistname]['catalogs'] == plistcatalogs:
+					if all_items[plistname]['catalogs'] == plistcatalogs and all_items[plistname]['minosversion'] == plistminosversion:
 						# See if this is a newer version than the one in there
 						if cmp (MunkiLooseVersion(plistversion), MunkiLooseVersion(all_items[plistname]['version'])) > 0 :
 							# If this is newer, then move the old one to the items to delete list
