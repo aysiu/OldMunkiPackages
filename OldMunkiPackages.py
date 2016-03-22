@@ -152,28 +152,28 @@ def main():
 				plist = plistlib.readPlist(fullfile)
 				plistname = plist['name']
 				plistversion = plist['version']
-				# The min OS version key doesn't exist in all pkginfo files
-				if 'minimum_os_version' in plist:
-					plistminimum_os_version = plist['minimum_os_version']
+				# Make sure it's not a protected package
+				if plistname in protected_packages and protected_packages[plistname]['version'] == plistversion:
+					logging.info('Keeping %s version %s because it is a protected package.' % (plistname, plistversion))
 				else:
-					plistminimum_os_version = ''
-				plistcatalogs = plist['catalogs']
-				plistcatalogs.sort()
-				# Some items won't have an installer_item_location: nopkg .plist files, for example... that's okay
-				if 'installer_item_location' in plist:
-					plistinstaller_item_location = os.path.join(pkgs_path, plist['installer_item_location'])
-				else:
-					plistinstaller_item_location = ''
-		
-				# Create a dictionary based on the plist values read
-				plistdict={ 'pkginfo': fullfile, 'version': plistversion, 'catalogs': plistcatalogs, 'installer_item_location': plistinstaller_item_location, 'minimum_os_version': plistminimum_os_version}
-				
-				# See if the plist name is already in all_items
-				if plistname in all_items:
-					# Make sure it's not a protected package
-					if plistname in protected_packages and protected_packages[plistname]['version'] == plistversion:
-						logging.info('Keeping %s version %s because it is a protected package.' % (plistname, plistversion))
+					# The min OS version key doesn't exist in all pkginfo files
+					if 'minimum_os_version' in plist:
+						plistminimum_os_version = plist['minimum_os_version']
 					else:
+						plistminimum_os_version = ''
+					plistcatalogs = plist['catalogs']
+					plistcatalogs.sort()
+					# Some items won't have an installer_item_location: nopkg .plist files, for example... that's okay
+					if 'installer_item_location' in plist:
+						plistinstaller_item_location = os.path.join(pkgs_path, plist['installer_item_location'])
+					else:
+						plistinstaller_item_location = ''
+		
+					# Create a dictionary based on the plist values read
+					plistdict={ 'pkginfo': fullfile, 'version': plistversion, 'catalogs': plistcatalogs, 'installer_item_location': plistinstaller_item_location, 'minimum_os_version': plistminimum_os_version}
+				
+					# See if the plist name is already in all_items
+					if plistname in all_items:
 						# Compare the previously existing one to the currently focused one to see if they have the same catalogs (fix this because it could be testing production or production testing)
 						if all_items[plistname]['catalogs'] == plistcatalogs and all_items[plistname]['minimum_os_version'] == plistminimum_os_version:
 							# See if this is a newer version than the one in there
@@ -189,9 +189,9 @@ def main():
 								if( plistdict['installer_item_location'] != '' ):
 									pkgs_to_delete.append(plistdict['installer_item_location'])
 								pkgsinfo_to_delete.append(plistdict['pkginfo'])
-				else:
-					# If it's not in the list already, add it
-					all_items[plistname]=plistdict		
+					else:
+						# If it's not in the list already, add it
+						all_items[plistname]=plistdict		
 
 		if pkgs_to_delete:
 			trash_old_stuff(pkgs_to_delete, pkgs_path, where_to_dump)
