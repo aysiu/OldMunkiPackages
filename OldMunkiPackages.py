@@ -171,7 +171,9 @@ def main():
 				# See if the plist name is already in all_items
 				if plistname in all_items:
 					# Make sure it's not a protected package
-					if plistname not in protected_packages or protected_packages[plistname]['version'] != plistversion:
+					if plistname in protected_packages and protected_packages[plistname]['version'] == plistversion:
+						logging.info('Keeping %s version %s because it is a protected package.' % (plistname, plistversion))
+					else:
 						# Compare the previously existing one to the currently focused one to see if they have the same catalogs (fix this because it could be testing production or production testing)
 						if all_items[plistname]['catalogs'] == plistcatalogs and all_items[plistname]['minimum_os_version'] == plistminimum_os_version:
 							# See if this is a newer version than the one in there
