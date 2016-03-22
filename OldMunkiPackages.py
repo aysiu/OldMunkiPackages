@@ -149,7 +149,7 @@ def main():
 				plistname = plist['name']
 				plistversion = plist['version']
 				# The min OS version key doesn't exist in all pkginfo files
-				if 'minosversion' in plist:
+				if plist['minosversion']:
 					plistminosversion = plist['minosversion']
 				else:
 					plistminosversion = ''
