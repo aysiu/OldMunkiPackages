@@ -148,7 +148,11 @@ def main():
 				plist = plistlib.readPlist(fullfile)
 				plistname = plist['name']
 				plistversion = plist['version']
-				plistminosversion = plist['minosversion']
+				# The min OS version key doesn't exist in all pkginfo files
+				if 'minosversion' in plist:
+					plistminosversion = plist['minosversion']
+				else:
+					plistminosversion = ''
 				plistcatalogs = plist['catalogs']
 				plistcatalogs.sort()
 				# Some items won't have an installer_item_location: nopkg .plist files, for example... that's okay
