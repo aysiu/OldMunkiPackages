@@ -34,7 +34,8 @@ Head over to [the releases page](https://github.com/aysiu/OldMunkiPackages/relea
 
 ### "Install" OMP manually
 Download the **OldMunkiPackages.py** file and put it in **/usr/local/omp/**
-Make sure it has proper permissions
+
+Make sure it has proper permissions:
 `sudo chmod 755 /usr/local/omp/OldMunkiPackages.py`
 
 ## Configure where to dump
