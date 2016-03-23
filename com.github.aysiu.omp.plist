@@ -4,5 +4,14 @@
 <dict>
     <key>dump_location</key>
     <string></string>
+    <key>protected_packages</key>
+	<array>
+		<dict>
+			<key>name</key>
+			<string>Office2011_update</string>
+			<key>version</key>
+			<string>14.0.1</string>
+		</dict>
+	</array>
 </dict>
 </plist>
