@@ -36,7 +36,7 @@ Download the **OldMunkiPackages.py** file and put it in **/usr/local/omp/**
 If you would like the dumped files to go somewhere other than your trash, modify the &lt;string&gt;&lt;/string&gt; part to be &lt;string&gt;/Path/To/Where/You/Want/Files/Dumped&lt;/string&gt;, and then put the **com.github.aysiu.omp.plist** file in the /Users/*username*/Library/Preferences folder of the *username* you're going to run OMP under. Otherwise, OMP will just default to using the logged-in user's trash as the dump folder.
 
 Alternatively, you can (instead of modifying and moving the file) just use a defaults command to create and modify the file at once:
-`defaults write /Users/`**`username`**`/Library/Preferences/com.github.aysiu.omp.plist dump_location "`**`/Path/To/Where/You/Want/Files/Dumped`**`"`
+`defaults write /Users/username/Library/Preferences/com.github.aysiu.omp.plist dump_location "/Path/To/Where/You/Want/Files/Dumped"` where **username** is your username and **/Path/To/Where/You/Want/Files/Dumped** is where you want files dumped.
 
 ## How do you use OMP?
 OMP will also look for your repo path in **~/Library/Preferences/com.googlecode.munki.munkiimport.plist**, which you create when you run the `/usr/local/munki/munkiimport --configure` command the first time you set up Munki.
@@ -53,7 +53,7 @@ I've tested it only on Mac OS X (El Capitan). In theory, it should work on older
 
 The user who runs the script must have full read/write permissions on the Munki repository, as well as the destination (her own trash, or whatever folder she picks to move the old packages to).
 
-## Why isn't OMP on a schedule?
+## Why isn't OMP on a schedule by default?
 The script isn't that destructive (rather than straight-out deleting the packages, it just moves them to a new location, even if that new location is the trash). Nevertheless, I would rather leave it up to the user to schedule (or run manually).
 
 ## How does OMP work?
@@ -74,7 +74,9 @@ As I said before, the goal of this tool is to be as simple as possible. I genera
 I don't plan on implementing a configurable number of recent package versions to keep (apart from the most recent one), but feel free to fork the project if you'd like to write your own modification.
 
 ## How do I make sure one particular old version of a package never gets removed?
-I'm currently contemplating how to best address this, and I've opened an issue (for myself) on this. There should be a way to protect these older packages (a great example is Office2011_update version 14.1.0--more details at [its AutoPkg recipe](https://github.com/autopkg/recipes/blob/master/MSOfficeUpdates/MSOffice2011Updates.munki.recipe).
+So far, I can thinkn of only one good example of this problem, which is Office2011_update version 14.1.0--more details at [its AutoPkg recipe](https://github.com/autopkg/recipes/blob/master/MSOfficeUpdates/MSOffice2011Updates.munki.recipe). For now, I've just hard-coded (in a one-item directory) that particular old version and package. In the future, I may consider making an array in the .plist preference file for allowing users to configure their own "protected packages."
+
+OMP also will not remove older versions of packages (even in the same catalogs) if the older version has a different minimum OS, so that may be one way around it if you want to keep older versions. For example, you may have a version of one package that goes through 10.10 and another that goes 10.11 and up. If you remove the 10.10 package, then the 10.10 users won't have access to any version of that package.
 
 ## Acknowledgements
 I straight-up lifted some code from Munki (to compare package versions and see which is newer), so thanks to Greg Neagle and the other Munki contributors. Also thanks to Joseph Chilcote for some Python logging code.
