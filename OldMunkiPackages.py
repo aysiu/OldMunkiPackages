@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
 from distutils import version
+import FoundationPlist
 import logging
 import os
-import plistlib
 from pprint import pprint
 import sys
 from types import StringType
@@ -91,7 +91,7 @@ def main():
 	# Try to get the new Munki path
 	munkiimport_prefs_location=os.path.join(os.getenv("HOME"), "Library/Preferences/com.googlecode.munki.munkiimport.plist")
 	if os.path.exists(munkiimport_prefs_location):
-		munkiimport_prefs=plistlib.readPlist(munkiimport_prefs_location)
+		munkiimport_prefs=FoundationPlist.readPlist(munkiimport_prefs_location)
 		MUNKI_ROOT_PATH=munkiimport_prefs['repo_path']
 	else:
 		logging.error("Cannot find the %s preferences file to read the Munki repo path" % munkiimport_prefs_location)
@@ -101,7 +101,7 @@ def main():
 	default_where_to_dump=os.path.join(os.getenv("HOME"), ".Trash")
 	omp_prefs_location=os.path.join(os.getenv("HOME"), "Library/Preferences/com.github.aysiu.omp.plist")
 	if os.path.exists(omp_prefs_location):
-		omp_prefs=plistlib.readPlist(omp_prefs_location)
+		omp_prefs=FoundationPlist.readPlist(omp_prefs_location)
 		if os.path.exists(omp_prefs['dump_location']):
 			where_to_dump=omp_prefs['dump_location']
 			logging.info("Will use dump location from the preferences file of %s." % where_to_dump)
@@ -149,7 +149,7 @@ def main():
 				if file.startswith("."):
 					continue
 				fullfile = os.path.join(root, file)
-				plist = plistlib.readPlist(fullfile)
+				plist = FoundationPlist.readPlist(fullfile)
 				plistname = plist['name']
 				plistversion = plist['version']
 				# Make sure it's not a protected package
