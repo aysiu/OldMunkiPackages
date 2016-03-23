@@ -100,7 +100,7 @@ def get_dump_location(prefs, default_dump):
 		logging.info("Will use dump location from the preferences file of %s." % dump_location)
 	else:
 		dump_location=default_dump
-		logging.info("Cannot determine a dump location from %s. Will be dumping to %s." % (omp_prefs_location, where_to_dump))
+		logging.info("Cannot determine a dump location from %s. Will be dumping to %s." % (prefs, default_dump))
 	return dump_location
 
 # Function that checks if a package and version are protected or not... for some reason, putting the two conditions in as one if/then doesn't seem to work
