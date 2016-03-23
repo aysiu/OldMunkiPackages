@@ -103,6 +103,16 @@ def get_dump_location(prefs, default_dump):
 		logging.info("Cannot determine a dump location from %s. Will be dumping to %s." % (omp_prefs_location, where_to_dump))
 	return dump_location
 
+# Function that checks if a package and version are protected or not... for some reason, putting the two conditions in as one if/then doesn't seem to work
+def not_protected_package(name, version, protected):
+	if name in protected:
+		if version in protected[name]:
+			return False
+		else:
+			return True
+	else:
+		return True
+
 # Main
 def main():
 
@@ -169,9 +179,8 @@ def main():
 				plistname = plist['name']
 				plistversion = plist['version']
 				# Make sure it's not a protected package
-				if plistname in protected_packages and plistversion in protected_packages[plistname]:
-					logging.info('Keeping %s version %s because it is a protected package.' % (plistname, plistversion))
-				else:
+				# For some reason, if plistname in protected_packages and plistversion in protected_packages[plistname]: won't work combined, so we'll do a function test that separates them
+				if not_protected_package(plistname, plistversion, protected_packages):
 					# The min OS version key doesn't exist in all pkginfo files
 					if 'minimum_os_version' in plist:
 						plistminimum_os_version = plist['minimum_os_version']
@@ -208,6 +217,9 @@ def main():
 					else:
 						# If it's not in the list already, add it
 						all_items[plistname]=plistdict		
+
+				else:
+					logging.info('Keeping %s version %s because it is a protected package.' % (plistname, plistversion))	
 
 		if pkgs_to_delete:
 			trash_old_stuff(pkgs_to_delete, pkgs_path, where_to_dump)
