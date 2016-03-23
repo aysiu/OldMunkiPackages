@@ -44,7 +44,7 @@ If you would like the dumped files to go somewhere other than your trash, modify
 You can also use a command like `defaults write com.github.aysiu.omp dump_location "/Path/To/Where/You/Want/Files/Dumped"`
 
 ## Configure protected packages
-If you would like to add more protected packages (the sample .plist file includes Office2011_update version 14.1.0 by default), you can do so by editing the .plist directly or by using a command like `defaults write com.github.aysiu.omp protected_packages -array-add '{name='Office2011_update'; version='14.0.1;'}'`
+If you would like to add more protected packages (the sample .plist file includes Office2011_update version 14.1.0 by default), you can do so by editing the .plist directly or by using a command like `defaults write com.github.aysiu.omp protected_packages -array-add '{name="Office2011_update"; version="14.0.1";}'`
 
 ## How do you use OMP?
 OMP will also look for your repo path in **~/Library/Preferences/com.googlecode.munki.munkiimport.plist**, which you create when you run the `/usr/local/munki/munkiimport --configure` command the first time you set up Munki.
