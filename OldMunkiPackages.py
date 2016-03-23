@@ -9,11 +9,6 @@ import sys
 from types import StringType
 from xml.parsers.expat import ExpatError
 
-# Dictionary of protected packages.
-# May move this to a .plist, if it turns out to be popular and more than just Microsoft Office 2011 updates.
-protected_packages = {}
-protected_packages['Office2011_update'] = { 'version': '14.1.0' }
-
 # Stolen from offset's offset
 if not os.path.exists(os.path.expanduser('~/Library/Logs')):
 	os.makedirs(os.path.expanduser('~/Library/Logs'))
@@ -85,6 +80,39 @@ def check_folder_writable(checkfolder):
 		logging.error("You don't have access to %s" % checkfolder)
 		sys.exit(1)
 
+# Function that gets protected packages or returns an empty dictionary
+def get_protected_packages(prefs):
+	protected={}
+	if 'protected_packages' in prefs:
+		for package in prefs['protected_packages']:
+			if package['name'] in protected:
+				protected[package['name']].append(package['version'])
+				logging.info("Adding version %s to %s in protected packages." % (package['version'], package['name']))
+			else:
+				protected[package['name']]=[package['version']]
+				logging.info("Adding %s version %s to protected packages." % (package['name'], package['version']))
+	return protected
+
+# Function that gets the dump location or returns the default
+def get_dump_location(prefs, default_dump):
+	if 'dump_location' in prefs and os.path.exists(prefs['dump_location']):
+		dump_location=prefs['dump_location']
+		logging.info("Will use dump location from the preferences file of %s." % dump_location)
+	else:
+		dump_location=default_dump
+		logging.info("Cannot determine a dump location from %s. Will be dumping to %s." % (omp_prefs_location, where_to_dump))
+	return dump_location
+
+# Function that checks if a package and version are protected or not... for some reason, putting the two conditions in as one if/then doesn't seem to work
+def not_protected_package(name, version, protected):
+	if name in protected:
+		if version in protected[name]:
+			return False
+		else:
+			return True
+	else:
+		return True
+
 # Main
 def main():
 
@@ -102,12 +130,10 @@ def main():
 	omp_prefs_location=os.path.join(os.getenv("HOME"), "Library/Preferences/com.github.aysiu.omp.plist")
 	if os.path.exists(omp_prefs_location):
 		omp_prefs=FoundationPlist.readPlist(omp_prefs_location)
-		if os.path.exists(omp_prefs['dump_location']):
-			where_to_dump=omp_prefs['dump_location']
-			logging.info("Will use dump location from the preferences file of %s." % where_to_dump)
-		else:
-			where_to_dump=default_where_to_dump
-			logging.info("Cannot determine a dump location from %s. Will be dumping to %s." % (omp_prefs_location, where_to_dump))
+		# Call function to get dump location from file
+		where_to_dump=get_dump_location(omp_prefs, default_where_to_dump)
+		# Call function to get protected packages
+		protected_packages=get_protected_packages(omp_prefs)
 	else:
 		where_to_dump=default_where_to_dump
 		logging.info("Cannot determine a dump location from %s. Will be dumping to %s." % (omp_prefs_location, where_to_dump))
@@ -153,9 +179,8 @@ def main():
 				plistname = plist['name']
 				plistversion = plist['version']
 				# Make sure it's not a protected package
-				if plistname in protected_packages and protected_packages[plistname]['version'] == plistversion:
-					logging.info('Keeping %s version %s because it is a protected package.' % (plistname, plistversion))
-				else:
+				# For some reason, if plistname in protected_packages and plistversion in protected_packages[plistname]: won't work combined, so we'll do a function test that separates them
+				if not_protected_package(plistname, plistversion, protected_packages):
 					# The min OS version key doesn't exist in all pkginfo files
 					if 'minimum_os_version' in plist:
 						plistminimum_os_version = plist['minimum_os_version']
@@ -192,6 +217,9 @@ def main():
 					else:
 						# If it's not in the list already, add it
 						all_items[plistname]=plistdict		
+
+				else:
+					logging.info('Keeping %s version %s because it is a protected package.' % (plistname, plistversion))	
 
 		if pkgs_to_delete:
 			trash_old_stuff(pkgs_to_delete, pkgs_path, where_to_dump)
