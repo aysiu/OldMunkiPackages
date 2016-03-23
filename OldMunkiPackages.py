@@ -87,8 +87,10 @@ def get_protected_packages(prefs):
 		for package in prefs['protected_packages']:
 			if package['name'] in protected:
 				protected[package['name']].append(package['version'])
+				logging.info("Adding version %s to %s in protected packages." % (package['version'], package['name']))
 			else:
 				protected[package['name']]=[package['version']]
+				logging.info("Adding %s version %s to protected packages." % (package['name'], package['version']))
 	return protected
 
 # Function that gets the dump location or returns the default
