@@ -138,7 +138,7 @@ def main():
 		where_to_dump=default_where_to_dump
 		logging.info("Cannot determine a dump location from %s. Will be dumping to %s." % (omp_prefs_location, where_to_dump))
 		protected_packages={}
-		logging.info("Cannot determine a protected packages from %s." % omp_prefs_location)
+		logging.info("Cannot determine a protected packages list from %s." % omp_prefs_location)
 		
 	# Where is make catalogs?
 	makecatalogs='/usr/local/munki/makecatalogs'
