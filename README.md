@@ -2,6 +2,7 @@
 Cleans out old Munki packages
 
 * [Why does OldMunkiPackages exist?](#why-does-oldmunkipackages-exist)
+* [Shouldn't it be OldMunkiItems and not OldMunkiPackages?](#shouldnt-it-be-oldmunkiitems and not oldmunkipackages)
 * [How do you install OMP?](#how-do-you-install-omp)
  * [Install .pkg file](#install-pkg-file)
  * ["Install" OMP manually](#install-omp-manually)
@@ -12,7 +13,6 @@ Cleans out old Munki packages
 * [Why isn't OMP on a schedule?](#why-isnt-omp-on-a-schedule)
 * [How does OMP work?](#how-does-omp-work)
 * [What does OMP do with older packages that aren't in the same catalogs as the newer packages?](#what-does-omp-do-with-older-packages-that-arent-in-the-same-catalogs-as-the-newer-packages)
-* [How do I keep two recent versions instead of only one?](#how-do-i-keep-two-recent-versions-instead-of-only-one)
 * [How do I make sure one particular old version of a package never gets removed?](#how-do-make-sure-one-particular-old-version-of-a-package-never-gets-removed)
 * [Acknowledgements](#acknowledgements)
 
@@ -26,6 +26,9 @@ There are other great tools and tutorials (see below) that do similar things but
 [Spruce](https://github.com/sheagcraig/Spruce-for-Munki) is a fairly sophisticated tool that does way more than I want (pretty cool features, though), and then there's [an interactive shell script](https://grpugh.wordpress.com/2015/04/24/munki-how-to-remove-cruft/) that helps to get old things out.
 
 I wanted to keep OMP (Old Munki Packages) fairly simple--just run with no arguments and automatically dump the old packages and pkginfo files.
+
+## Shouldn't it be OldMunkiItems and not OldMunkiPackages?
+Yes, it should. My bad. Not everything in a Munki repository is a .pkg. Sometimes it's an .app. Sometimes it's a nopkg.
 
 ## How do you install OMP?
 
@@ -75,9 +78,6 @@ You're welcome to look at the code, but in plain English, it basically works thi
 OMP will check the catalogs a package belongs to, sort them (so _testing, production_ and _production, testing_ will be comparable), and compare them. So only if the exact catalogs match will the old one be dumped. This works well for situations like an older package being in _testing_ and _production_, and a newer package being in only _testing_. In that case, you don't want to ditch the older package yet (until you've had a chance to test the newer one).
 
 If you have some packages going through _development_, _testing_, _production_ while other packages go through only _testing_, _production_, that's fine... as long as each package of the same name goes through the same catalog track. In other words, if CustomForYourOrg goes through _development_, _testing_, _production_ and has two versions, the older version will be ditched if both the older and newer versions have _development_, _testing_, _production_ as their catalogs. But you could also have MozillaFirefox go through only _testing_, _production_, and OMP will work fine to get rid of all the old Firefoxes, as long as they all have _testing_, _production_ as their catalogs.
-
-## How do I keep two recent versions instead of only one?
-Add the name and version to the protected packages array in the .plist preferences file.
 
 ## How do I make sure one particular old version of a package never gets removed?
 Add the name and version to the protected packages array in the .plist preferences file.
