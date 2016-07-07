@@ -2,7 +2,7 @@
 Cleans out old Munki packages
 
 * [Why does OldMunkiPackages exist?](#why-does-oldmunkipackages-exist)
-* [Shouldn't it be OldMunkiItems and not OldMunkiPackages?](#shouldnt-it-be-oldmunkiitems and not oldmunkipackages)
+* [Shouldn't it be OldMunkiItems and not OldMunkiPackages?](#shouldnt-it-be-oldmunkiitems-and-not-oldmunkipackages)
 * [How do you install OMP?](#how-do-you-install-omp)
  * [Install .pkg file](#install-pkg-file)
  * ["Install" OMP manually](#install-omp-manually)
