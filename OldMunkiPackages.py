@@ -188,7 +188,10 @@ def main():
 						plistminimum_os_version = plist['minimum_os_version']
 					else:
 						plistminimum_os_version = ''
-					plistcatalogs = plist['catalogs']
+					try:
+						plistcatalogs = plist['catalogs']
+					except KeyError as err:
+						logging.error("KeyError occured looking for key {} while checking {}, it does not have a catalog".format(err, file))
 					plistcatalogs.sort()
 					# Some items won't have an installer_item_location: nopkg .plist files, for example... that's okay
 					if 'installer_item_location' in plist:
