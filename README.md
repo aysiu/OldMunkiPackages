@@ -25,12 +25,12 @@ There are other great tools and tutorials (see below) that do similar things but
 
 [Spruce](https://github.com/sheagcraig/Spruce-for-Munki) is a fairly sophisticated tool that does way more than I want (pretty cool features, though), and then there's [an interactive shell script](https://grpugh.wordpress.com/2015/04/24/munki-how-to-remove-cruft/) that helps to get old things out.
 
-In August 2016, Greg Neagle also created [repoclean](https://github.com/munki/munki/blob/master/code/client/repoclean) as included in the Munki client code. I haven't had a chance to try that out myself yet.
+In August 2016, Greg Neagle also created [repoclean](https://github.com/munki/munki/blob/master/code/client/repoclean) as included in the Munki client code. Deletes instead of moves old stuff. Great tool if that's what you want to do.
 
 I wanted to keep OMP (Old Munki Packages) fairly simple--just run with no arguments and automatically dump the old packages and pkginfo files.
 
 ## Shouldn't it be OldMunkiItems and not OldMunkiPackages?
-Yes, it should. My bad. Not everything in a Munki repository is a .pkg. Sometimes it's an .app. Sometimes it's a nopkg.
+Yes, it should. My bad. Not everything in a Munki repository is a .pkg. Sometimes it's an .app. Sometimes it's a nopkg. Sometimes it's a profile.
 
 ## How do you install OMP?
 
