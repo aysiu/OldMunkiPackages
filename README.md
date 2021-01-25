@@ -25,23 +25,20 @@ There are other great tools and tutorials (see below) that do similar things but
 
 [Spruce](https://github.com/sheagcraig/Spruce-for-Munki) is a fairly sophisticated tool that does way more than I want (pretty cool features, though), and then there's [an interactive shell script](https://grpugh.wordpress.com/2015/04/24/munki-how-to-remove-cruft/) that helps to get old things out.
 
-In August 2016, Greg Neagle also created [repoclean](https://github.com/munki/munki/blob/master/code/client/repoclean) as included in the Munki client code. Deletes instead of moves old stuff. Great tool if that's what you want to do.
+In August 2016, Greg Neagle also created [repoclean](https://github.com/munki/munki/blob/main/code/client/repoclean) as included in the Munki client code. Deletes instead of moves old stuff. Great tool if that's what you want to do.
 
 I wanted to keep OMP (Old Munki Packages) fairly simple--just run with no arguments and automatically dump the old packages and pkginfo files.
 
 ## Shouldn't it be OldMunkiItems and not OldMunkiPackages?
-Yes, it should. My bad. Not everything in a Munki repository is a .pkg. Sometimes it's an .app. Sometimes it's a nopkg. Sometimes it's a profile.
+Yes, it should. My bad. Not everything in a Munki repository is a .pkg. Sometimes it's an .app. Sometimes it's a nopkg.
 
 ## How do you install OMP?
 
 ### Install .pkg file
-Head over to [the releases page](https://github.com/aysiu/OldMunkiPackages/releases/) to get the latest pre-packaged release.
+Head over to [the releases page](https://github.com/aysiu/OldMunkiPackages/releases/) to get the latest pre-packaged release (unsigned).
 
-### "Install" OMP manually
-Download the **OldMunkiPackages.py** file and put it in **/usr/local/omp/**
+You can also use [Munki-Pkg](https://github.com/munki/munki-pkg) to build the package yourself, especially if there are any tweaks you want to make before packaging it.
 
-Make sure it has proper permissions:
-`sudo chmod 755 /usr/local/omp/OldMunkiPackages.py`
 
 ## Configure where to dump
 If you would like the dumped files to go somewhere other than your trash, modify the &lt;string&gt;&lt;/string&gt; part to be &lt;string&gt;/Path/To/Where/You/Want/Files/Dumped&lt;/string&gt;, and then put the **com.github.aysiu.omp.plist** file in the /Users/*username*/Library/Preferences folder of the *username* you're going to run OMP under. Otherwise, OMP will just default to using the logged-in user's trash as the dump folder.
@@ -54,15 +51,15 @@ If you would like to add more protected packages (the sample .plist file include
 ## How do you use OMP?
 OMP will also look for your repo path in **~/Library/Preferences/com.googlecode.munki.munkiimport.plist**, which you create when you run the `/usr/local/munki/munkiimport --configure` command the first time you set up Munki.
 
-If you want to use OMP in conjunction with [Outset](https://github.com/chilcote/outset), you can put OMP into /usr/local/outset/login-every and have the script run every time you log into your Munki server or, if you use [Offset](https://github.com/aysiu/offset), you can put OMP into /usr/local/offset/logout-every and have the script run every time you log out of your Munki server.
-
-If you don't want it scheduled, you can just call it manually:
+You can just call it manually:
 `/usr/local/omp/OldMunkiPackages.py`
+
+If you want to integrate it into your CI/CD processes, just treat it as you would any other script.
 
 Logs (errors or information) will go to **~/Library/Logs/omp.log**
 
 ## What are the requirements for OMP?
-I've tested it only on macOS (El Capitan and Sierra). In theory, it should work on older Macs. The way the script is written (referencing .plist files in ~/Library/Preferences) means it won't work for Windows or Linux.
+I've tested it only on macOS (Catalina). In theory, it should work on older Macs, but it relies on Munki's embedded Python being installed. The way the script is written (referencing .plist files in ~/Library/Preferences) means it won't work for Windows or Linux.
 
 The user who runs the script must have full read/write permissions on the Munki repository, as well as the destination (her own trash, or whatever folder she picks to move the old packages to).
 
@@ -87,4 +84,4 @@ Add the name and version to the protected packages array in the .plist preferenc
 OMP also will not remove older versions of packages (even in the same catalogs) if the older version has a different minimum OS, so that may be one way around it if you want to keep older versions. For example, you may have a version of one package that goes through 10.10 and another that goes 10.11 and up. If you remove the 10.10 package, then the 10.10 users won't have access to any version of that package.
 
 ## Acknowledgements
-I straight-up lifted some code from Munki (to compare package versions and see which is newer), so thanks to Greg Neagle and the other Munki contributors. Also thanks to Joseph Chilcote for some Python logging code.
+Thanks to Joseph Chilcote for some Python logging code.
