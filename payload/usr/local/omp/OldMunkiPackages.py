@@ -29,12 +29,14 @@ def trash_old_stuff(trashlist, trashpath, newpath):
             # Make sure all the relevant subfolders exist in the destination
             if not os.path.exists(os.path.dirname(new_location)):
                 os.makedirs(os.path.dirname(new_location))
-            # Even though we've been double-checking paths all along, let's just make one last check
+            # Even though we've been double-checking paths all along, let's just make one
+            # last check
             if os.path.exists(old_location) and os.path.isdir(newpath):
                 os.rename(old_location, new_location)
                 logging.info('Moving {} to {}\n'.format(old_location, new_location))
             else:
-                logging.error('One of {} or {} does not exist\n'.format(old_location, new_location))
+                logging.error('One of {} or {} does not exist\n'.format(old_location,
+                    new_location))
     else:
         logging.error('{} is not a valid list\n'.format(trashlist))
 
@@ -59,23 +61,28 @@ def get_protected_packages(prefs):
         for package in prefs['protected_packages']:
             if package['name'] in protected:
                 protected[package['name']].append(package['version'])
-                logging.info('Adding version {} to {} in protected packages.'.format(package['version'], package['name']))
+                logging.info('Adding version {} to {} in protected '
+                    'packages.'.format(package['version'], package['name']))
             else:
                 protected[package['name']] = [package['version']]
-                logging.info('Adding {} version {} to protected packages.'.format(package['name'], package['version']))
+                logging.info('Adding {} version {} to protected '
+                    'packages.'.format(package['name'], package['version']))
     return protected
 
 # Function that gets the dump location or returns the default
 def get_dump_location(prefs, default_dump):
     if 'dump_location' in prefs and os.path.exists(prefs['dump_location']):
         dump_location = prefs['dump_location']
-        logging.info('Will use dump location from the preferences file of {}.'.format(dump_location))
+        logging.info('Will use dump location from the preferences '
+            'file of {}.'.format(dump_location))
     else:
         dump_location = default_dump
-        logging.info('Cannot determine a dump location from {}. Will be dumping to {}.'.format(prefs, default_dump))
+        logging.info('Cannot determine a dump location from {}. Will '
+            'be dumping to {}.'.format(prefs, default_dump))
     return dump_location
 
-# Function that checks if a package and version are protected or not... for some reason, putting the two conditions in as one if/then doesn't seem to work
+# Function that checks if a package and version are protected or not... for some reason,
+# putting the two conditions in as one if/then doesn't seem to work
 def not_protected_package(name, version, protected):
     if name in protected:
         if version in protected[name]:
@@ -107,9 +114,11 @@ def get_omp_prefs():
         protected_packages = get_protected_packages(omp_prefs)
     else:
         where_to_dump = default_where_to_dump
-        logging.info('Cannot determine a dump location from {}. Will be dumping to {}.'.format(omp_prefs_location, where_to_dump))
+        logging.info('Cannot determine a dump location from {}. Will be dumping '
+            'to {}.'.format(omp_prefs_location, where_to_dump))
         protected_packages = {}
-        logging.info('Cannot determine a protected packages list from {}. Not protecting any packages.'.format(omp_prefs_location))
+        logging.info('Cannot determine a protected packages list from {}. Not '
+            'protecting any packages.'.format(omp_prefs_location))
     return where_to_dump, protected_packages
 
 # Main
@@ -133,7 +142,8 @@ def main():
 
     # Check that the paths for the pkgsinfo and pkgs exist
     if not os.path.isdir(pkgsinfo_path) and not os.path.isdir(pkgs_path):
-        logging.error('Your pkgsinfo and pkgs paths are not valid. Please check your repo_url value')
+        logging.error('Your pkgsinfo and pkgs paths are not valid. Please '
+            'check your repo_url value')
     else:
         # Make sure all relevant folders are writable
         check_folder_writable(pkgsinfo_path)
@@ -171,7 +181,9 @@ def main():
                 plistname = plist['name']
                 plistversion = plist['version']
                 # Make sure it's not a protected package
-                # For some reason, if plistname in protected_packages and plistversion in protected_packages[plistname]: won't work combined, so we'll do a function test that separates them
+                # For some reason, if plistname in protected_packages and plistversion in
+                # protected_packages[plistname]: won't work combined, so we'll do a
+                # function test that separates them
                 if not_protected_package(plistname, plistversion, protected_packages):
                     # The min OS version key doesn't exist in all pkginfo files
                     if 'minimum_os_version' in plist:
@@ -181,31 +193,45 @@ def main():
                     try:
                         plistcatalogs = plist['catalogs']
                     except KeyError as err:
-                        logging.error('KeyError occured looking for key {} while checking {}, it does not have a catalog'.format(err, file))
+                        logging.error('KeyError occured looking for key {} while checking '
+                            '{}, it does not have a catalog'.format(err, file))
                     plistcatalogs.sort()
-                    # Some items won't have an installer_item_location: nopkg .plist files, for example... that's okay
+                    # Some items won't have an installer_item_location: nopkg .plist
+                    # files, for example... that's okay
                     if 'installer_item_location' in plist:
-                        plistinstaller_item_location = os.path.join(pkgs_path, plist['installer_item_location'])
+                        plistinstaller_item_location = os.path.join(pkgs_path,
+                            plist['installer_item_location'])
                     else:
                         plistinstaller_item_location = ''
         
                     # Create a dictionary based on the plist values read
-                    plistdict = { 'pkginfo': fullfile, 'version': plistversion, 'catalogs': plistcatalogs, 'installer_item_location': plistinstaller_item_location, 'minimum_os_version': plistminimum_os_version}
+                    plistdict = { 'pkginfo': fullfile,
+                            'version': plistversion,
+                            'catalogs': plistcatalogs,
+                            'installer_item_location': plistinstaller_item_location,
+                            'minimum_os_version': plistminimum_os_version }
                 
                     # See if the plist name is already in all_items
                     if plistname in all_items:
-                        # Compare the previously existing one to the currently focused one to see if they have the same catalogs (fix this because it could be testing production or production testing)
-                        if all_items[plistname]['catalogs'] ==  plistcatalogs and all_items[plistname]['minimum_os_version'] ==  plistminimum_os_version:
+                        # Compare the previously existing one to the currently focused
+                        # one to see if they have the same catalogs (fix this because it
+                        # could be testing production or production testing)
+                        if (all_items[plistname]['catalogs'] ==  plistcatalogs and
+                                all_items[plistname]['minimum_os_version'] ==
+                                    plistminimum_os_version):
                             # See if this is a newer version than the one in there
-                            if LooseVersion(plistversion) > LooseVersion(all_items[plistname]['version']):
-                                # If this is newer, then move the old one to the items to delete list
+                            if (LooseVersion(plistversion) >
+                                    LooseVersion(all_items[plistname]['version'])):
+                                # If this is newer, then move the old one to the items to
+                                # delete list
                                 if( all_items[plistname]['installer_item_location'] !=  '' ):
                                     pkgs_to_delete.append(all_items[plistname]['installer_item_location'])
                                 pkgsinfo_to_delete.append(all_items[plistname]['pkginfo'])
                                 del all_items[plistname]
                                 all_items[plistname] = plistdict
                             else:
-                                # Otherwise, if this is older, keep the old one in there, and move this one to the delete list
+                                # Otherwise, if this is older, keep the old one in there,
+                                # and move this one to the delete list
                                 if( plistdict['installer_item_location'] !=  '' ):
                                     pkgs_to_delete.append(plistdict['installer_item_location'])
                                 pkgsinfo_to_delete.append(plistdict['pkginfo'])
@@ -214,7 +240,8 @@ def main():
                         all_items[plistname] = plistdict
 
                 else:
-                    logging.info('Keeping {} version {} because it is a protected package.'.format(plistname, plistversion))    
+                    logging.info('Keeping {} version {} because it is a protected '
+                        'package.'.format(plistname, plistversion))    
 
         if pkgs_to_delete:
             trash_old_stuff(pkgs_to_delete, pkgs_path, where_to_dump)
@@ -222,12 +249,15 @@ def main():
             trash_old_stuff(pkgsinfo_to_delete, pkgsinfo_path, where_to_dump)
 
         if pkgs_to_delete or pkgsinfo_to_delete:
-            # If /usr/local/munki/makecatalogs exists (it should), then run it to reflect the changes or let the user know to run it
+            # If /usr/local/munki/makecatalogs exists (it should), then run it to reflect
+            # the changes or let the user know to run it
             if os.path.exists(makecatalogs):
                 logging.info('Running makecatalogs')
                 os.system(makecatalogs)
             else:
-                logging.error('{} could not be found. When you have a chance, run makecatalogs on your Munki repo to have the changes reflected.'.format(makecatalogs))
+                logging.error('{} could not be found. When you have a chance, run '
+                    'makecatalogs on your Munki repo to have the changes '
+                    'reflected.'.format(makecatalogs))
         else:
             logging.info('Nothing old to dump.')
 
